@@ -4,11 +4,14 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = "com.myapp")
+@EnableTransactionManagement
 public class MyappConfig {
 
 	@Bean
@@ -37,6 +41,15 @@ public class MyappConfig {
 		localSessionFactory.setHibernateProperties(getHibernateProperties());
 		return localSessionFactory;
 
+	}
+	
+	@Bean
+	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+		
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
+		transactionManager.setSessionFactory(sessionFactory);
+		return transactionManager;
+		
 	}
 	
 	public Properties getHibernateProperties() {

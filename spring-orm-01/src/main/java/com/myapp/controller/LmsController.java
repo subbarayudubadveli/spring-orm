@@ -9,17 +9,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.myapp.dao.InstructorDao;
 import com.myapp.entity.InstructorInfo;
+import com.myapp.service.InstructorService;
 
 @Controller
 public class LmsController {
  
 	@Autowired
-	private InstructorDao instructorDao;
+	private InstructorService instructorService;
 	
 	@RequestMapping("/instructor-info")
 	public String findAllInstructor(Model model) {
 		
-		List<InstructorInfo> instructorInfoList = instructorDao.getAllInstructorInfo();
+		List<InstructorInfo> instructorInfoList = instructorService.getAllInstructorInfo();
 		model.addAttribute("instructorsData", instructorInfoList);
 		
 		return "instructor-info";
